@@ -1,0 +1,56 @@
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
+
+import { edit } from '../feature/articleSlice';
+const EditArticle = () => {
+    const params = useParams()
+    const id = params.id
+    const articles = useSelector(state => state.articles)
+    const existingArticle = articles.filter(article => article.id === id)
+
+
+    const [title, setTitle] = useState(existingArticle[0].title);
+    const [text, setText] = useState(existingArticle[0].text);
+    const [img, setImg] = useState(existingArticle[0].img);
+
+    console.log(title)
+
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const handeledit = () => {
+        
+        dispatch(edit({ id:params.id , title, text, img }))
+        navigate('/')
+        console.log('edit')
+    }
+
+
+    return (
+        
+        <div className='container '>
+            <h1 className='alert alert-dark'>Edit Article</h1>
+            <form className="form" action='post'>
+                <label >Title</label>
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className='form-control' />
+
+                <label >Text</label>
+                <textarea value={text} onChange={(e) => setText(e.target.value)} className='form-control' cols="30" rows="10"></textarea>
+
+                <label >Image</label>
+                <input type="file"  onChange={(e) => setImg(e.target.value)} className='form-control' />
+
+                <button onClick={handeledit} className='btn btn-success mt-5' >Submit</button>
+
+
+            </form>
+
+        </div>
+
+        
+    )
+}
+
+export default EditArticle
